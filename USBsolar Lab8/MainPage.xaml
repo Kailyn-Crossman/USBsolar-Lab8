@@ -25,6 +25,31 @@
                     Title="Select ComPort"
                     HorizontalOptions="Center"/>
             </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Bits"
+                    FontSize="Medium"/>
+                <Button
+                    x:Name="btnBit0"
+                    Text="1"
+                    FontSize="Medium"
+                    Clicked="btnBit0_Clicked"/>
+                <Button
+                    x:Name="btnBit1"
+                    Text="1"
+                    FontSize="Medium"
+                    Clicked="btnBit1_Clicked"/>
+                <Button
+                    x:Name="btnBit2"
+                    Text="1"
+                    FontSize="Medium"
+                    Clicked="btnBit2_Clicked"/>
+                <Button
+                    x:Name="btnBit3"
+                    Text="1"
+                    FontSize="Medium"
+                    Clicked="btnBit3_Clicked"/>To
+            </HorizontalStackLayout>
         </VerticalStackLayout>
         <VerticalStackLayout>
             <HorizontalStackLayout>

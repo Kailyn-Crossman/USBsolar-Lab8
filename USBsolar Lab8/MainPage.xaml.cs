@@ -1,5 +1,7 @@
 ﻿using System.IO.Ports;
+using System.Net.Sockets;
 using System.Text;
+using Windows.Devices.Enumeration;
 
 namespace USBsolar_Lab8;
 //adding a change
@@ -14,6 +16,7 @@ public partial class MainPage : ContentPage
     private int chkSumError = 0;
 
     SerialPort serialPort = new SerialPort();
+    StringBuilder stringBuilderSend = new StringBuilder("###1111196");
 
     public MainPage()
     {
@@ -63,7 +66,7 @@ public partial class MainPage : ContentPage
             }
             if (newPacket.Substring(0, 3) == "###")
             {
-               
+                newPacketNumber = Convert.ToInt32(newPacket.Substring(3, 3));
 
                 if (oldPacketNumber > -1)
                 {
@@ -114,9 +117,7 @@ public partial class MainPage : ContentPage
                                    $"{lostPacketCount,-11}" +
                                    $"{chkSumError,-14}" +
                                    $"{packetRollover,-14}\r\n";
-
-                newPacketNumber = Convert.ToInt32(newPacket.Substring(3, 3));
-
+            
                 if (checkBoxParseHistory.IsChecked == true)
                 {
                     labelParsedData.Text = parsedData + labelParsedData.Text;
@@ -157,6 +158,67 @@ public partial class MainPage : ContentPage
         try
         {
             string messageOut = entrySend.Text;
+            messageOut += "\r\n";
+            byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);
+            serialPort.Write(messageBytes, 0, messageBytes.Length);
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Alert", ex.Message, "OK");
+        }
+
+    }
+
+    private void btnBit3_Clicked(object sender, EventArgs e)
+    {
+        ButonClicked(3);
+    }
+
+    private void btnBit2_Clicked(object sender, EventArgs e)
+    {
+        ButonClicked(2);
+    }
+
+    private void btnBit1_Clicked(object sender, EventArgs e)
+    {
+        ButonClicked(1);
+    }
+
+    private void btnBit0_Clicked(object sender, EventArgs e)
+    {
+        ButonClicked(0);
+    }
+
+    private void ButonClicked(int i)
+    {
+        Button[] btnBits = new Button[] { btnBit0, btnBit1, btnBit2, btnBit3 };
+        if (btnBits[i].Text == "0")
+        {
+            btnBits[i].Text = "1";
+            stringBuilderSend[i+3]='1';
+        }
+        else
+        {
+            btnBits[i].Text = "0";
+            stringBuilderSend[i + 3] = '0';
+        }
+        sendPacket();
+    }
+
+    private void sendPacket()
+    {
+        int calSendChkSum = 0;
+        try
+        {         
+            for (int i = 3; i < 7; i++)
+            {
+                calSendChkSum += (byte)stringBuilderSend[i];
+            }
+            calSendChkSum %= 1000;
+            stringBuilderSend.Remove(7, 3);
+            stringBuilderSend.Insert(7, calSendChkSum.ToString());
+            string messageOut = stringBuilderSend.ToString();
+            entrySend.Text = stringBuilderSend.ToString();
             messageOut += "\r\n";
             byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);
             serialPort.Write(messageBytes, 0, messageBytes.Length);
