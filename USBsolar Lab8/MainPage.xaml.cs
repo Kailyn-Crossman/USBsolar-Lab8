@@ -1,24 +1,138 @@
-﻿namespace USBsolar_Lab8;
+﻿using System.IO.Ports;
+using System.Text;
 
+namespace USBsolar_Lab8;
+//adding a change
 public partial class MainPage : ContentPage
 {
-	int count = 0;
+    private bool bPortOpen = false;
+    private string newPacket = "";
+    private int oldPacketNumber = -1;
+    private int newPacketNumber = 0;
+    private int lostPacketNumber = 0;
+    private int packetRollover = 0;
+    private int chkSumError = 0;
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    SerialPort serialPort = new SerialPort();
 
-	private void OnCounterClicked(object sender, EventArgs e)
-	{
-		count++;
+    public MainPage()
+    {
+        InitializeComponent();
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+        string[] ports = SerialPort.GetPortNames();
+        portPicker.ItemsSource = ports;
+        portPicker.SelectedIndex = ports.Length;
+        Loaded += MainPage_Loaded;
+        /*foreach (string port in ports)
+		{
+			portPicker.Items.Add(port);
+		}*/
+    }
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
-	}
+    private void MainPage_Loaded(object sender, EventArgs e)
+    {
+        serialPort.BaudRate = 115200;
+        serialPort.ReceivedBytesThreshold = 1;
+        serialPort.DataReceived += SerialPort_DataReceived;
+
+    }
+
+    private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+    {
+        newPacket = serialPort.ReadLine();
+        MainThread.BeginInvokeOnMainThread(MyMainThreadCode);
+    }
+
+    private void MyMainThreadCode()
+    {
+        if (checkBoxHistory.IsChecked == true)
+        {
+            labelRXdata.Text = newPacket + labelRXdata.Text;
+        }
+        else
+        {
+            labelRXdata.Text = newPacket;
+        }
+        int calChkSum = 0;
+        if (newPacket.Length > 37)
+        {
+            if (newPacket.Substring(0, 3) == "###")
+            {
+                calChkSum %= 1000;
+                int recChkSum = Convert.ToInt32(newPacket.Substring(34, 3));
+                if (recChkSum == calChkSum)
+                {
+                    //DisplaySolarData(newPacket);
+                }
+                else
+                {
+                    chkSumError++;
+                    //labelChkSumError.Text = chkSumError.ToString();
+                }
+                //if (oldPacket....
+            }
+            if (newPacket.Substring(0, 3) == "###")
+            {
+                string parsedData = $"{newPacket.Length,-14}" +
+                                    $"{newPacket.Substring(0, 3),-14}" +
+                                    $"{newPacket.Substring(3, 3),-14}" +
+                                    $"{newPacket.Substring(6, 4),-14}" +
+                                    $"{newPacket.Substring(10, 4),-14}" +
+                                    $"{newPacket.Substring(14, 4),-14}" +
+                                    $"{newPacket.Substring(18, 4),-14}" +
+                                    $"{newPacket.Substring(22, 4),-14}" +
+                                    $"{newPacket.Substring(26, 4),-14}" +
+                                    $"{newPacket.Substring(30, 4),-14}" +
+                                    $"{newPacket.Substring(34, 3),-14}" + "\r\n";
+
+                if (checkBoxParseHistory.IsChecked == true)
+                {
+                    labelParsedData.Text = parsedData + labelParsedData.Text;
+                }
+                else
+                {
+                    labelParsedData.Text = parsedData;
+                }
+            }
+        }
+    }
+
+    private void btnOpenClose_Clicked(object sender, EventArgs e)
+    {
+        if (!bPortOpen)
+        {
+            serialPort.PortName = portPicker.SelectedItem.ToString();
+            serialPort.Open();
+            btnOpenClose.Text = "Close";
+            bPortOpen = true;
+        }
+        else
+        {
+            serialPort.Close();
+            btnOpenClose.Text = "Open";
+            bPortOpen = false;
+        }
+    }
+
+    private void btnClear_Clicked(object sender, EventArgs e)
+    {
+
+    }
+
+    private async void btnSend_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            string messageOut = entrySend.Text;
+            messageOut += "\r\n";
+            byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);
+            serialPort.Write(messageBytes, 0, messageBytes.Length);
+        }
+        catch (Exception ex)
+        {
+            DisplayAlert("Alert", ex.Message, "OK");
+        }
+
+    }
 }
 

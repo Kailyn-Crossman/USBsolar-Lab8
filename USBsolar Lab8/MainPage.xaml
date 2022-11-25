@@ -3,39 +3,90 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="USBsolar_Lab8.MainPage">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <HorizontalStackLayout
+        Spacing="25"
+        Padding="30.0"
+        VerticalOptions="StartAndExpand">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
-
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Button
+                    x:Name="btnOpenClose"
+                    Text="Open"
+                    SemanticProperties.Hint="Open com port"
+                    Clicked="btnOpenClose_Clicked"/>
+                <Button
+                    x:Name="btnClear"
+                    Text="Clear"
+                    SemanticProperties.Hint="Clear serial data"
+                    Clicked="btnClear_Clicked"/>
+                <Picker
+                    x:Name="portPicker"
+                    Title="Select ComPort"
+                    HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+        <VerticalStackLayout>
+            <HorizontalStackLayout>
+                <Button
+                    x:Name="btnSend"
+                    Text="Send"
+                    Clicked="btnSend_Clicked"
+                    HorizontalOptions="Center"/>
+                <Entry
+                    x:Name="entrySend"
+                    Text="###111196"
+                    HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <Label
+                    Text="Recieved Packet History"
+                    HorizontalOptions="Center"/>
+                <CheckBox
+                    x:Name="checkBoxHistory"
+                    IsChecked="False"
+                    HorizontalOptions="Center"/>
+                <Label
+                    Padding="100,0,0,0"
+                    Text="Parsed Packet History"/>
+                <CheckBox
+                    x:Name="checkBoxParseHistory"
+                    IsChecked="False"
+                    HorizontalOptions="Center"/>
+            </HorizontalStackLayout>
             <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
-
+                Text="Received Packet"/>
+            <ScrollView
+                x:Name="scrollViewRecData"
+                MaximumHeightRequest="500"
+                VerticalOptions="StartAndExpand"/>
             <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+                x:Name="labelRXdata"
+                Text="Received Packet"
+                MinimumWidthRequest="310"/>
+            <Label
+                Text="Parsed Packet"/>
+            <HorizontalStackLayout>
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+                <Label
+                    Text="Length    Header     Number   Analog0    Analog1    Analog2    Analog3     Analog4    Analog5    Binary       CkSumRx"
+                    HorizontalOptions="Center"/>
+
+            </HorizontalStackLayout>
+            <HorizontalStackLayout>
+                <ScrollView
+                x:Name="scrollViewParseData"
+                MaximumHeightRequest="500"
+                VerticalOptions="StartAndExpand"/>
+                <Label
+                x:Name="labelParsedData"
+                Text="Parsed Packet"
+                MinimumWidthRequest="310"/>
+
+            </HorizontalStackLayout>
 
         </VerticalStackLayout>
-    </ScrollView>
+    </HorizontalStackLayout>
 
 </ContentPage>
+
