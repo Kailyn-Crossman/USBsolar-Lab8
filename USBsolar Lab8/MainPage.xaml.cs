@@ -9,7 +9,7 @@ public partial class MainPage : ContentPage
     private string newPacket = "";
     private int oldPacketNumber = -1;
     private int newPacketNumber = 0;
-    private int lostPacketNumber = 0;
+    private int lostPacketCount = 0;
     private int packetRollover = 0;
     private int chkSumError = 0;
 
@@ -53,37 +53,69 @@ public partial class MainPage : ContentPage
         {
             labelRXdata.Text = newPacket;
         }
+
         int calChkSum = 0;
         if (newPacket.Length > 37)
         {
             if (newPacket.Substring(0, 3) == "###")
             {
+                  //if (oldPacket....
+            }
+            if (newPacket.Substring(0, 3) == "###")
+            {
+               
+
+                if (oldPacketNumber > -1)
+                {
+                    if (newPacketNumber < oldPacketNumber)
+                    {
+                        packetRollover++;
+                        if (oldPacketNumber != 999)
+                        {
+                            lostPacketCount += 999 - oldPacketNumber + newPacketNumber;
+                        }
+                    }
+                    else
+                    {
+                        if (newPacketNumber != oldPacketNumber +1)
+                        {
+                            lostPacketCount += newPacketNumber - oldPacketNumber;
+                        }
+                    }
+                }
+                for (int i = 3; i < 34; i++)
+                {
+                    calChkSum += (byte)newPacket[i];
+                }
                 calChkSum %= 1000;
                 int recChkSum = Convert.ToInt32(newPacket.Substring(34, 3));
                 if (recChkSum == calChkSum)
                 {
                     //DisplaySolarData(newPacket);
+                    oldPacketNumber = newPacketNumber;
                 }
                 else
                 {
                     chkSumError++;
-                    //labelChkSumError.Text = chkSumError.ToString();
                 }
-                //if (oldPacket....
-            }
-            if (newPacket.Substring(0, 3) == "###")
-            {
+
                 string parsedData = $"{newPacket.Length,-14}" +
-                                    $"{newPacket.Substring(0, 3),-14}" +
-                                    $"{newPacket.Substring(3, 3),-14}" +
-                                    $"{newPacket.Substring(6, 4),-14}" +
-                                    $"{newPacket.Substring(10, 4),-14}" +
-                                    $"{newPacket.Substring(14, 4),-14}" +
-                                    $"{newPacket.Substring(18, 4),-14}" +
-                                    $"{newPacket.Substring(22, 4),-14}" +
-                                    $"{newPacket.Substring(26, 4),-14}" +
-                                    $"{newPacket.Substring(30, 4),-14}" +
-                                    $"{newPacket.Substring(34, 3),-14}" + "\r\n";
+                                   $"{newPacket.Substring(0, 3),-14}" +
+                                   $"{newPacket.Substring(3, 3),-14}" +
+                                   $"{newPacket.Substring(6, 4),-14}" +
+                                   $"{newPacket.Substring(10, 4),-14}" +
+                                   $"{newPacket.Substring(14, 4),-14}" +
+                                   $"{newPacket.Substring(18, 4),-14}" +
+                                   $"{newPacket.Substring(22, 4),-14}" +
+                                   $"{newPacket.Substring(26, 4),-14}" +
+                                   $"{newPacket.Substring(30, 4),-14}" +
+                                   $"{newPacket.Substring(34, 3),-17}" +
+                                   $"{calChkSum,-19}" +
+                                   $"{lostPacketCount,-11}" +
+                                   $"{chkSumError,-14}" +
+                                   $"{packetRollover,-14}\r\n";
+
+                newPacketNumber = Convert.ToInt32(newPacket.Substring(3, 3));
 
                 if (checkBoxParseHistory.IsChecked == true)
                 {
@@ -94,6 +126,7 @@ public partial class MainPage : ContentPage
                     labelParsedData.Text = parsedData;
                 }
             }
+
         }
     }
 

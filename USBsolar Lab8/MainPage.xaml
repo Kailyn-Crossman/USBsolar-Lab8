@@ -35,7 +35,7 @@
                     HorizontalOptions="Center"/>
                 <Entry
                     x:Name="entrySend"
-                    Text="###111196"
+                    Text="###1111196"
                     HorizontalOptions="Center"/>
             </HorizontalStackLayout>
             <HorizontalStackLayout>
@@ -69,12 +69,11 @@
             <HorizontalStackLayout>
 
                 <Label
-                    Text="Length    Header     Number   Analog0    Analog1    Analog2    Analog3     Analog4    Analog5    Binary       CkSumRx"
+                    Text="Length    Header     Number   Analog0    Analog1    Analog2    Analog3     Analog4    Analog5    Binary       CkSumRx    CkSumCal     lost     ChkErr    Rollover  "
                     HorizontalOptions="Center"/>
 
             </HorizontalStackLayout>
-            <HorizontalStackLayout>
-                <ScrollView
+            <ScrollView
                 x:Name="scrollViewParseData"
                 MaximumHeightRequest="500"
                 VerticalOptions="StartAndExpand"/>
@@ -82,9 +81,7 @@
                 x:Name="labelParsedData"
                 Text="Parsed Packet"
                 MinimumWidthRequest="310"/>
-
-            </HorizontalStackLayout>
-
+            
         </VerticalStackLayout>
     </HorizontalStackLayout>
 
