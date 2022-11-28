@@ -18,6 +18,7 @@ public partial class MainPage : ContentPage
     SerialPort serialPort = new SerialPort();
     StringBuilder stringBuilderSend = new StringBuilder("###1111196");
 
+    SolarCalc solarCalc = new SolarCalc();
     public MainPage()
     {
         InitializeComponent();
@@ -26,10 +27,6 @@ public partial class MainPage : ContentPage
         portPicker.ItemsSource = ports;
         portPicker.SelectedIndex = ports.Length;
         Loaded += MainPage_Loaded;
-        /*foreach (string port in ports)
-		{
-			portPicker.Items.Add(port);
-		}*/
     }
 
     private void MainPage_Loaded(object sender, EventArgs e)
@@ -129,6 +126,11 @@ public partial class MainPage : ContentPage
             }
 
         }
+    }
+
+    private void DisplaySolarData(string validPacket)
+    {
+       solarCalc.
     }
 
     private void btnOpenClose_Clicked(object sender, EventArgs e)
