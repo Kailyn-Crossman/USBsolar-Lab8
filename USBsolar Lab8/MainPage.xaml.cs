@@ -18,7 +18,7 @@ public partial class MainPage : ContentPage
     SerialPort serialPort = new SerialPort();
     StringBuilder stringBuilderSend = new StringBuilder("###1111196");
 
-    SolarCalc solarCalc = new SolarCalc();
+    //SolarCalc solarCalc = new SolarCalc();
     public MainPage()
     {
         InitializeComponent();
@@ -57,10 +57,7 @@ public partial class MainPage : ContentPage
         int calChkSum = 0;
         if (newPacket.Length > 37)
         {
-            if (newPacket.Substring(0, 3) == "###")
-            {
-                  //if (oldPacket....
-            }
+          
             if (newPacket.Substring(0, 3) == "###")
             {
                 newPacketNumber = Convert.ToInt32(newPacket.Substring(3, 3));
@@ -130,7 +127,7 @@ public partial class MainPage : ContentPage
 
     private void DisplaySolarData(string validPacket)
     {
-       solarCalc.
+     //  solarCalc.
     }
 
     private void btnOpenClose_Clicked(object sender, EventArgs e)
