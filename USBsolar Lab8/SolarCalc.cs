@@ -38,17 +38,17 @@ namespace USBsolar_Lab8
          public string GetCurrent(double an1, double shuntResistorAnalogValue)
          {
             //get difference between values
-            double voltDif = shuntResistorAnalogValue - an1;
+            double voltDif = an1 - shuntResistorAnalogValue;
             //divide by 100 ohm
-            double current = (voltDif / 100) * 100;
+            double current = (voltDif / 100) * 1000;
            
-             return current.ToString("0.000" + "A");
+             return current.ToString("0.000" + "mA");
          }
 
          public string GetLEDCurrent(double an1, double shuntResistorAnalog)
          {
             //needs to eleminate negative values caused by noise
-            double voltDif = an1 - shuntResistorAnalog;
+            double voltDif = shuntResistorAnalog - an1;
             double current = 0;
             if (voltDif < 0)
             {
@@ -56,10 +56,10 @@ namespace USBsolar_Lab8
             } else
             {
                 //divide by 100 ohm
-                current = (voltDif / 100) * 100;
+                current = (voltDif / 100) * 1000;
             }
 
-            return current.ToString("0.000" + "A");
+            return current.ToString("0.000" + "mA");
              
          }
 

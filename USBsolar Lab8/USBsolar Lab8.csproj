@@ -49,6 +49,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\ledoff.png" />
+	  <None Remove="Resources\Images\ledon.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <PackageReference Include="System.IO.Ports" Version="7.0.0" />
 	</ItemGroup>
 
