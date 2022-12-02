@@ -127,10 +127,10 @@ public partial class MainPage : ContentPage
 
     private void DisplaySolarData(string validPacket)
     {
-      double averageVolt0 = solarCalc.averageVoltage(solarCalc.analogValue(validPacket, 0));
+      double averageVolt0 = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 0));
         labelSolarVolt.Text = averageVolt0.ToString();
-        int analogValue1 = solarCalc.analogValue(validPacket, 1);
-        labelBatteryVolt.Text= analogValue1.ToString();
+      double averageVolt1 = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 1));
+        labelBatteryVolt.Text= averageVolt1.ToString();
     }
 
     private void btnOpenClose_Clicked(object sender, EventArgs e)

@@ -11,28 +11,27 @@ namespace USBsolar_Lab8
 {
     internal class SolarCalc
     {
-        public int analogValue(string newPacket, int indexOfAnalog)
+        public int avgAnalogValue(string newPacket, int indexOfAnalog)
         {
             string[] voltage;
+            int voltageReading = 0;
             voltage = new string[5];
-            for (int i = 0; i < 5; i++) 
-            {
-                //Read Pin
-                voltage[i] = $"{newPacket.Substring(6 + (i*4), 4)}";
+            for (int i = 0; i < 7; i++){
+                for (int e = 0; e < 5; e++)
+                {
+                    //Read Pin
+                    voltage[e] = $"{newPacket.Substring(6 + (e * 4), 4)}";
+                }
+                voltageReading += Convert.ToInt32(voltage[indexOfAnalog]);
             }
-            int value = Convert.ToInt32(voltage[indexOfAnalog]);
-            return value;
+            voltageReading = voltageReading / 6;
+            return voltageReading;
         }
 
-        public double averageVoltage(int voltageToAverage)
+        public double analogToVoltage(int voltage)
         {
-            int totalVal = 0;
-            for(int i = 0; i < 9;i++)
-            {
-              totalVal += voltageToAverage;
-            }
-            double avgValue = totalVal / 8;
-            double voltValue = (3.3 * avgValue) / 4095;
+            
+            double voltValue = (3.3 * voltage) / 4095;
             return voltValue;
         }
 
