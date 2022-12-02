@@ -127,10 +127,14 @@ public partial class MainPage : ContentPage
 
     private void DisplaySolarData(string validPacket)
     {
-      double averageVolt0 = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 0));
-        labelSolarVolt.Text = averageVolt0.ToString();
-      double averageVolt1 = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 1));
-        labelBatteryVolt.Text= averageVolt1.ToString();
+        double solarVolt = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 0));
+        labelSolarVolt.Text = solarVolt.ToString("0.0") + "V";
+        double batteryVolt = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 2));
+        labelBatteryVolt.Text= batteryVolt.ToString("0.0") + "V";
+        labelBatteryCurrent.Text = solarCalc.GetCurrent(solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 1)), solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 2)));
+        labelLED1Current.Text = solarCalc.GetCurrent(solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 4)), solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 1)));
+        labelLED2Current.Text = solarCalc.GetCurrent(solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 3)), solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 1)));
+
     }
 
     private void btnOpenClose_Clicked(object sender, EventArgs e)

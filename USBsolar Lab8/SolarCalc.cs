@@ -11,10 +11,10 @@ namespace USBsolar_Lab8
 {
     internal class SolarCalc
     {
-        public int avgAnalogValue(string newPacket, int indexOfAnalog)
+        public double avgAnalogValue(string newPacket, int indexOfAnalog)
         {
             string[] voltage;
-            int voltageReading = 0;
+            double voltageReading = 0;
             voltage = new string[5];
             for (int i = 0; i < 7; i++){
                 for (int e = 0; e < 5; e++)
@@ -28,29 +28,42 @@ namespace USBsolar_Lab8
             return voltageReading;
         }
 
-        public double analogToVoltage(int voltage)
+        public double analogToVoltage(double voltage)
         {
             
             double voltValue = (3.3 * voltage) / 4095;
             return voltValue;
         }
 
-        /* public string GetCurrent(double an1, double shuntResistorAnalogValue)
+         public string GetCurrent(double an1, double shuntResistorAnalogValue)
          {
-             //get difference between values
-             //divide by 100 ohm
-             //return value.ToString();
+            //get difference between values
+            double voltDif = shuntResistorAnalogValue - an1;
+            //divide by 100 ohm
+            double current = (voltDif / 100) * 100;
+           
+             return current.ToString("0.000" + "A");
          }
 
          public string GetLEDCurrent(double an1, double shuntResistorAnalog)
          {
-             //needs to eleminate negative values caused by noise
-             //get average value of specified shunt resistor
-             //divide by 100 ohm
-             //return value.ToString();
+            //needs to eleminate negative values caused by noise
+            double voltDif = an1 - shuntResistorAnalog;
+            double current = 0;
+            if (voltDif < 0)
+            {
+                voltDif = 0;
+            } else
+            {
+                //divide by 100 ohm
+                current = (voltDif / 100) * 100;
+            }
+
+            return current.ToString("0.000" + "A");
+             
          }
 
-         public string GetVoltageString(double analogValue)
+         /*public string GetVoltageString(double analogValue)
          {
              //Just get it i guess
          }
