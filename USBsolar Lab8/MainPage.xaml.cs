@@ -15,6 +15,8 @@ public partial class MainPage : ContentPage
     private int packetRollover = 0;
     private int chkSumError = 0;
 
+    //my global voltage reading 
+
     SerialPort serialPort = new SerialPort();
     StringBuilder stringBuilderSend = new StringBuilder("###1111196");
 
@@ -89,6 +91,11 @@ public partial class MainPage : ContentPage
                 if (recChkSum == calChkSum)
                 {
                     DisplaySolarData(newPacket);
+                    
+                   // string stringbnanana = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(newPacket, 0));
+                   // int numberbanana = baanana.toint32();
+                    //drawnewpointongraph( value of voltage ) function 
+                    //                      numberbanana
                     oldPacketNumber = newPacketNumber;
                 }
                 else
@@ -128,6 +135,7 @@ public partial class MainPage : ContentPage
     private void DisplaySolarData(string validPacket)
     {
         double solarVolt = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 0));
+        int numbersolarVolt = solarVolt.Toint32();
         labelSolarVolt.Text = solarVolt.ToString("0.0") + "V";
         double batteryVolt = solarCalc.analogToVoltage(solarCalc.avgAnalogValue(validPacket, 2));
         labelBatteryVolt.Text= batteryVolt.ToString("0.0") + "V";
@@ -263,5 +271,8 @@ public partial class MainPage : ContentPage
     {
         ButonClicked(1);
     }
+
+    // drawnewpointongraph function 
+        //lGD.lG[0].yaxis = global voltage reading
 }
 
